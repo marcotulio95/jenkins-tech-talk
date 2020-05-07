@@ -1,5 +1,5 @@
 def runTests = true;
-def currentBuild.result = 'FAILURE';
+currentBuild.result = 'FAILURE';
 
 
 node('master') {
