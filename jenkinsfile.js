@@ -38,23 +38,17 @@ node('master') {
 		}
 	
 		stage('Archive Artifacts'){
-			//archiveArtifacts '*.jar'
+			archiveArtifacts '*.jar'
 		}
 
 		stage('Test & Publish junit'){
-			withMaven( maven: 'mvn' ){
-				steps {
-                	sh 'mvn test'
-				}
-				post {
-					always {
-						junit 'target/surefire-reports/*.xml'
-					}
-				}
+			
+			def existsTeste = fileExists 'target/site/surefire-report.html'
+			
+			withMaven(options: [junitPublisher(disabled: true)]){
+				sh "mvn test"
 			}
 		}
-		
-
     }catch(Exception e)
     {
         //todo handle script returned exit code 143
@@ -62,7 +56,7 @@ node('master') {
         throw e;
     }finally
     {
-    	//cleanWs()
+    	cleanWs()
     	sendMessageViaSlack("Build Finish - ${env.JOB_NAME} with status: ${currentBuild.result} (<${env.BUILD_URL}|Open>)")
     }
 }
