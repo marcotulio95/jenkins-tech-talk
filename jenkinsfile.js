@@ -38,7 +38,7 @@ node('master') {
 		}
 	
 		stage('Archive Artifacts'){
-			archiveArtifacts '*.jar'
+			//archiveArtifacts '*.jar'
 		}
 
 		stage('Test & Publish junit'){
