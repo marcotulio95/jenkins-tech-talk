@@ -32,7 +32,7 @@ node('master') {
 		}
 		
 		stage('Build'){
-			antStage("all")
+			//antStage("all")
 		}
 	
 		stage('Archive Artifacts'){
