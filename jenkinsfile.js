@@ -32,23 +32,25 @@ node('master') {
 		}
 		
 		stage('Build'){
-			//antStage("all")
+			withMaven( maven: 'mvn' ){
+				sh "mvn -B -DskipTests clean package"
+			}
 		}
 	
 		stage('Archive Artifacts'){
-			//archiveArtifacts 'tmp/hybris/temp/hybris/hybrisServer/*.zip'
+			archiveArtifacts '*.jar'
 		}
 
 		stage('Test & Publish junit'){
-			
-			//antStage("alltests -Dtestclasses.packages=br.com.exedio.* -Dtestclasses.annotations=unittests")
-			
-			def existsTeste = fileExists 'tmp/hybris/log/junit/*xml'
-			
-			if(existsTeste) {
-				step([$class: 'JUnitResultArchiver', testResults: 'tmp/hybris/log/junit/*xml'])
-			}else{
-				echo 'No tests found !'
+			withMaven( maven: 'mvn' ){
+				steps {
+                	sh 'mvn test'
+				}
+				post {
+					always {
+						junit 'target/surefire-reports/*.xml'
+					}
+				}
 			}
 		}
 		
