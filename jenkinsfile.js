@@ -4,10 +4,7 @@ currentBuild.result = 'SUCCESS';
 
 node('master') {
 	
-    tools {
-        maven 'Maven 3.3.9'
-        jdk 'jdk8'
-    }
+  	tool name: 'mvn', type: 'maven'
 	
 
 	def isMaster = false;
