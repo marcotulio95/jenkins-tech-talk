@@ -1,7 +1,4 @@
-def runTests = true;
 currentBuild.result = 'SUCCESS';
-
-
 pipeline{
 	
 	agent any
@@ -11,6 +8,7 @@ pipeline{
         jdk 'jdk8'
     }
 
+	def runTests = true;
 	def isMaster = false;
     def isRelease = false;
     def isFeature = false;
