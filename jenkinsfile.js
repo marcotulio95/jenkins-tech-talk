@@ -2,8 +2,15 @@ def runTests = true;
 currentBuild.result = 'SUCCESS';
 
 
-node('master') {
+pipeline{
 	
+	agent any
+    
+	tools {
+        maven 'Maven 3.3.9'
+        jdk 'jdk8'
+    }
+
 	def isMaster = false;
     def isRelease = false;
     def isFeature = false;
@@ -32,9 +39,7 @@ node('master') {
 		}
 		
 		stage('Build'){
-			withMaven( maven: 'mvn' ){
 				sh "mvn -B -DskipTests clean package"
-			}
 		}
 	
 		stage('Archive Artifacts'){
@@ -42,7 +47,6 @@ node('master') {
 		}
 
 		stage('Test & Publish junit'){
-			withMaven( maven: 'mvn' ){
 				steps {
                 	sh 'mvn test'
 				}
@@ -51,7 +55,6 @@ node('master') {
 						junit 'target/surefire-reports/*.xml'
 					}
 				}
-			}
 		}
 		
 
