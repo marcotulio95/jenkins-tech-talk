@@ -38,7 +38,7 @@ public class CalculadoraImplTest extends TestCase {
         Double number1 = Double.valueOf(8);
         Double number2 = Double.valueOf(2);
         Double result = calculadora.dividir(number1, number2);
-        assertEquals("8/2=4", 4, result);
+        assertEquals("8/2=4", Double.valueOf(4), result);
     }
 
 }
