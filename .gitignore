@@ -1,2 +1,5 @@
 data/jenkins/
 data/mysql/
+.idea/
+target/
+techtalk.iml
