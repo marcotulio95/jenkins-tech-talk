@@ -45,7 +45,7 @@ node('master') {
 			
 			def existsTeste = fileExists 'target/site/surefire-report.html'
 			
-			withMaven(options: [junitPublisher(disabled: true)]){
+			withMaven(options: [junitPublisher(disabled: false)]){
 				sh "mvn test"
 			}
 		}
@@ -56,7 +56,7 @@ node('master') {
         throw e;
     }finally
     {
-    	cleanWs()
+    	//cleanWs()
     	sendMessageViaSlack("Build Finish - ${env.JOB_NAME} with status: ${currentBuild.result} (<${env.BUILD_URL}|Open>)")
     }
 }
