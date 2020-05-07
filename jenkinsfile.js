@@ -45,7 +45,7 @@ node('master') {
 			
 			def existsTeste = fileExists 'target/site/surefire-report.html'
 			
-			withMaven(options: [junitPublisher(disabled: false)]){
+			withMaven(options: [junitPublisher(disabled: false)], maven: 'mvn' ){
 				sh "mvn test"
 			}
 		}
