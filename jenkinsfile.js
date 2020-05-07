@@ -1,5 +1,5 @@
 def runTests = true;
-currentBuild.result = 'FAILURE';
+currentBuild.result = 'SUCCESS';
 
 
 node('master') {
@@ -50,8 +50,6 @@ node('master') {
 			}else{
 				echo 'No tests found !'
 			}
-
-			currentBuild.result = 'SUCCESS'
 		}
 		
 
