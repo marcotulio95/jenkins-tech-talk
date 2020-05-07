@@ -1,5 +1,5 @@
 def runTests = true;
-currentBuild.result = 'FAILURE';
+def currentBuild.result = 'FAILURE';
 
 
 node('master') {
@@ -20,7 +20,7 @@ node('master') {
 	    def jobName = env.JOB_NAME;
 	    def buildNumber = env.BUILD_NUMBER;
 
-	    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '10', daysToKeepStr: '', numToKeepStr: '')), disableConcurrentBuilds(), [$class: 'GogsProjectProperty', gogsSecret: 'top_s3cret!', gogsUsePayload: false], pipelineTriggers([cron('H H(0-0) * * *')])])
+	    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '10', daysToKeepStr: '', numToKeepStr: '')), disableConcurrentBuilds(), pipelineTriggers([cron('H H(0-0) * * *')])])
 
 		echo("Branch: $branchName; master: $isMaster release: $isRelease develop: $isDevelop")
     	setBuildName()
@@ -36,12 +36,12 @@ node('master') {
 		}
 	
 		stage('Archive Artifacts'){
-			archiveArtifacts 'tmp/hybris/temp/hybris/hybrisServer/*.zip'
+			//archiveArtifacts 'tmp/hybris/temp/hybris/hybrisServer/*.zip'
 		}
 
 		stage('Test & Publish junit'){
 			
-			antStage("alltests -Dtestclasses.packages=br.com.exedio.* -Dtestclasses.annotations=unittests")
+			//antStage("alltests -Dtestclasses.packages=br.com.exedio.* -Dtestclasses.annotations=unittests")
 			
 			def existsTeste = fileExists 'tmp/hybris/log/junit/*xml'
 			
