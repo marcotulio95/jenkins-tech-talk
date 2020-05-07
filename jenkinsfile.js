@@ -1,5 +1,5 @@
 def runTests = true;
-currentBuild.result = 'FAILURE';
+currentBuild.result = 'SUCCESS';
 
 
 node('master') {
@@ -32,29 +32,20 @@ node('master') {
 		}
 		
 		stage('Build'){
-			//antStage("all")
+			withMaven( maven: 'mvn' ){
+				sh "mvn -B -DskipTests clean package"
+			}
 		}
 	
 		stage('Archive Artifacts'){
-			//archiveArtifacts 'tmp/hybris/temp/hybris/hybrisServer/*.zip'
+			//archiveArtifacts '*.jar'
 		}
 
 		stage('Test & Publish junit'){
-			
-			//antStage("alltests -Dtestclasses.packages=br.com.exedio.* -Dtestclasses.annotations=unittests")
-			
-			def existsTeste = fileExists 'tmp/hybris/log/junit/*xml'
-			
-			if(existsTeste) {
-				step([$class: 'JUnitResultArchiver', testResults: 'tmp/hybris/log/junit/*xml'])
-			}else{
-				echo 'No tests found !'
+			withMaven(options: [junitPublisher(disabled: false)], maven: 'mvn' ){
+				sh "mvn test"
 			}
-
-			currentBuild.result = 'SUCCESS'
 		}
-		
-
     }catch(Exception e)
     {
         //todo handle script returned exit code 143
@@ -62,7 +53,7 @@ node('master') {
         throw e;
     }finally
     {
-    	cleanWs()
+    	//cleanWs()
     	sendMessageViaSlack("Build Finish - ${env.JOB_NAME} with status: ${currentBuild.result} (<${env.BUILD_URL}|Open>)")
     }
 }
