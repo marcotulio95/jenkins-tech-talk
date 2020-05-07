@@ -4,9 +4,6 @@ currentBuild.result = 'SUCCESS';
 
 node('master') {
 	
-  	tool name: 'mvn', type: 'maven'
-	
-
 	def isMaster = false;
     def isRelease = false;
     def isFeature = false;
@@ -28,14 +25,16 @@ node('master') {
 		echo("Branch: $branchName; master: $isMaster release: $isRelease develop: $isDevelop")
     	setBuildName()
     	sendMessageViaSlack("Build Started - ${env.JOB_NAME}  (<${env.BUILD_URL}|Open>)")
-		
+
 		stage('Checkout & CleanUp'){
 			deleteDir()
 			checkoutFomGit()
 		}
 		
 		stage('Build'){
+			withMaven( maven: 'mvn' ){
 				sh "mvn -B -DskipTests clean package"
+			}
 		}
 	
 		stage('Archive Artifacts'){
@@ -43,6 +42,7 @@ node('master') {
 		}
 
 		stage('Test & Publish junit'){
+			withMaven( maven: 'mvn' ){
 				steps {
                 	sh 'mvn test'
 				}
@@ -51,6 +51,7 @@ node('master') {
 						junit 'target/surefire-reports/*.xml'
 					}
 				}
+			}
 		}
 		
 
