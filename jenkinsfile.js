@@ -62,7 +62,7 @@ node('master') {
         throw e;
     }finally
     {
-    	cleanWs()
+    	//cleanWs()
     	sendMessageViaSlack("Build Finish - ${env.JOB_NAME} with status: ${currentBuild.result} (<${env.BUILD_URL}|Open>)")
     }
 }
