@@ -23,6 +23,6 @@ public class CalculadoraImpl implements Calculadora {
 
     @Override
     public Double dividir(Double number1, Double number2) {
-        return number1*number2; // TODO It's wrong as example
+        return number1/number2;
     }
 }

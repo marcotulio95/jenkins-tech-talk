@@ -42,18 +42,8 @@ node('master') {
 		}
 
 		stage('Test & Publish junit'){
-			def logPath = "target/surefire-reports/*xml"
-			
 			withMaven(options: [junitPublisher(disabled: false)], maven: 'mvn' ){
 				sh "mvn test"
-			}
-			
-			def existsTeste = fileExists "${logPath}"	
-
-			if(existsTeste) {
-				step([$class: 'JUnitResultArchiver', testResults: logPath])
-			}else{
-				echo 'No tests found !'
 			}
 		}
     }catch(Exception e)
