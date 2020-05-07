@@ -51,7 +51,7 @@ node('master') {
 				echo 'No tests found !'
 			}
 
-
+			currentBuild.result = 'SUCCESS'
 		}
 		
 
