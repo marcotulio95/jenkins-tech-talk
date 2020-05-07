@@ -8,22 +8,22 @@ pipeline{
         jdk 'jdk8'
     }
 
-	def runTests = true;
-	def isMaster = false;
-    def isRelease = false;
-    def isFeature = false;
+	 runTests = true;
+	 isMaster = false;
+     isRelease = false;
+     isFeature = false;
     
     try
     {
-		def workspace = env.WORKSPACE;
-		def jenkins_home = env.JENKINS_HOME;
-    	def branchName = env.BRANCH_NAME;
+		 workspace = env.WORKSPACE;
+		 jenkins_home = env.JENKINS_HOME;
+    	 branchName = env.BRANCH_NAME;
 	    isMaster = branchName.toString() == "master";
-	    def isDevelop = branchName.toString() == "develop";
+	     isDevelop = branchName.toString() == "develop";
 	    isRelease = isReleaseBranch();
 	    isFeature = !(isMaster || isRelease || isDevelop);
-	    def jobName = env.JOB_NAME;
-	    def buildNumber = env.BUILD_NUMBER;
+	     jobName = env.JOB_NAME;
+	     buildNumber = env.BUILD_NUMBER;
 
 	    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '10', daysToKeepStr: '', numToKeepStr: '')), disableConcurrentBuilds(), pipelineTriggers([cron('H H(0-0) * * *')])])
 
@@ -70,36 +70,36 @@ pipeline{
 
 //Myfunctions
 
-def sendMessageViaSlack(message){
+ sendMessageViaSlack(message){
 
-	def channel = "teste-techtalk"
+	 channel = "teste-techtalk"
 
 	slackSend channel: "$channel", message: "$message", tokenCredentialId: 'AtZTUdI8yhYkGr1LNcMbChWe'
 }
 
-def checkoutFomGit(){
+ checkoutFomGit(){
 		checkout scm
 }
 
-def getRepository(gitUrl, folderTarget){
+ getRepository(gitUrl, folderTarget){
 	checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: "$folderTarget"]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'b0864a31-0a3a-48fd-be36-8f15e5d0665a', url: "$gitUrl" ]]])
 }
 
 
-def getRepository(gitUrl, folderTarget, branch){
+ getRepository(gitUrl, folderTarget, branch){
     checkout([$class: 'GitSCM', branches: [[name: "*/$branch"]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: "$folderTarget"]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'b0864a31-0a3a-48fd-be36-8f15e5d0665a', url: "$gitUrl" ]]])
 }
 
 boolean isReleaseBranch()
 {
-    def branchName = env.BRANCH_NAME
+     branchName = env.BRANCH_NAME
     // release branches named major.minor(.bugfix)_releaseName; note: env.BRANCH_NAME is available in multi-branch-pipeline projects
     // Gitflow forces us to use prefix "release/"
     branchName != null && branchName.matches("(release/)?\\d+\\.\\d+(\\.\\d+)?_.*");
 }
 
-def setBuildName(){
-	def jobName = env.JOB_NAME
-	def buildNumber = currentBuild.number
+ setBuildName(){
+	 jobName = env.JOB_NAME
+	 buildNumber = currentBuild.number
 	currentBuild.displayName = "$jobName"+"#"+"$buildNumber"
 }
